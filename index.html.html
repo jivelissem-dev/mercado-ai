@@ -1,0 +1,2123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercado Automations and AI | Florida's AI Command Center for Retail</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-blue: #0088ff;
+            --primary-green: #00ff88;
+            --primary-purple: #8800ff;
+            --primary-gold: #ffaa00;
+            --dark-bg: #0a0e27;
+            --card-glass: rgba(255, 255, 255, 0.05);
+            --border-glass: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #000000;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Ultra HD 3D Background Canvas */
+        #background-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        /* Gradient overlays for depth */
+        .gradient-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(ellipse at top, rgba(0, 136, 255, 0.15), transparent 50%),
+                        radial-gradient(ellipse at bottom, rgba(136, 0, 255, 0.15), transparent 50%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        /* Animated particles overlay */
+        .particles-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.8), transparent);
+            border-radius: 50%;
+            animation: float-particle 20s infinite ease-in-out;
+        }
+
+        @keyframes float-particle {
+            0%, 100% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translate(var(--tx), var(--ty)) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 5%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 900;
+            background: linear-gradient(135deg, #0088ff 0%, #00ff88 50%, #8800ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-blue), transparent);
+            animation: scan 3s infinite;
+        }
+
+        @keyframes scan {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        .nav-cta {
+            padding: 14px 35px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 0 40px rgba(0, 136, 255, 0.6),
+                        inset 0 0 20px rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-cta::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .nav-cta:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(0, 136, 255, 0.9);
+        }
+
+        /* Content wrapper */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: 55% 45%;
+            align-items: center;
+            padding: 140px 5% 80px;
+            gap: 80px;
+            position: relative;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 72px;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff 0%, #00ff88 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: breathe 4s ease-in-out infinite;
+            text-shadow: 0 0 80px rgba(0, 255, 136, 0.3);
+        }
+
+        @keyframes breathe {
+            0%, 100% { 
+                transform: scale(1);
+                filter: brightness(1);
+            }
+            50% { 
+                transform: scale(1.02);
+                filter: brightness(1.1);
+            }
+        }
+
+        .kinetic-word {
+            display: inline-block;
+            animation: float-word 3s ease-in-out infinite;
+            color: var(--primary-green);
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.8);
+        }
+
+        @keyframes float-word {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        .hero-content .subheading {
+            font-size: 26px;
+            color: #a0aec0;
+            margin-bottom: 35px;
+            line-height: 1.5;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .value-bullets {
+            list-style: none;
+            margin-bottom: 45px;
+        }
+
+        .value-bullets li {
+            font-size: 20px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px;
+            background: rgba(0, 255, 136, 0.05);
+            border-radius: 15px;
+            border-left: 3px solid var(--primary-green);
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+        }
+
+        .value-bullets li:hover {
+            transform: translateX(10px);
+            background: rgba(0, 255, 136, 0.1);
+            box-shadow: 0 5px 20px rgba(0, 255, 136, 0.2);
+        }
+
+        .value-bullets li::before {
+            content: "✓";
+            color: var(--primary-green);
+            font-weight: 900;
+            font-size: 28px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        .cta-group {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .primary-cta {
+            padding: 22px 50px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 50px rgba(0, 136, 255, 0.7),
+                        0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+            transition: left 0.5s;
+        }
+
+        .primary-cta:hover::before {
+            left: 100%;
+        }
+
+        .primary-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 70px rgba(0, 136, 255, 1),
+                        0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .secondary-cta {
+            padding: 22px 50px;
+            background: rgba(0, 255, 136, 0.1);
+            border: 2px solid var(--primary-green);
+            border-radius: 50px;
+            color: var(--primary-green);
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .secondary-cta:hover {
+            background: var(--primary-green);
+            color: #000;
+            transform: translateY(-5px);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+        }
+
+        /* Advanced 3D Hero Visual */
+        .hero-visual {
+            position: relative;
+            height: 650px;
+            perspective: 1000px;
+        }
+
+        #hero-canvas {
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            border-radius: 30px;
+        }
+
+        .zone-labels {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .zone-label {
+            position: absolute;
+            padding: 12px 24px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(20px);
+            border: 2px solid var(--primary-blue);
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 700;
+            opacity: 0.6;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.3);
+        }
+
+        .zone-label.active {
+            opacity: 1;
+            transform: scale(1.15);
+            box-shadow: 0 0 50px rgba(0, 136, 255, 0.8);
+            border-width: 3px;
+        }
+
+        /* Ultra Premium Calculator */
+        .calculator-section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .calculator-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.08), rgba(136, 0, 255, 0.08));
+            backdrop-filter: blur(30px);
+            border-radius: 40px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            padding: 70px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.5),
+                        inset 0 0 80px rgba(255, 255, 255, 0.03);
+            transform: translateZ(30px);
+            transition: all 0.5s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calculator-container::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 255, 136, 0.1), transparent 50%);
+            animation: rotate-gradient 20s linear infinite;
+        }
+
+        @keyframes rotate-gradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .calculator-container:hover {
+            transform: translateZ(30px) translateY(-15px);
+            box-shadow: 0 30px 100px rgba(0, 136, 255, 0.4),
+                        inset 0 0 100px rgba(255, 255, 255, 0.05);
+            border-color: rgba(0, 255, 136, 0.5);
+        }
+
+        .calculator-header {
+            text-align: center;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .calculator-header h2 {
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 60px rgba(0, 255, 136, 0.3);
+        }
+
+        .input-group {
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            font-weight: 600;
+        }
+
+        .slider-container {
+            position: relative;
+            padding: 20px 0;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 10px;
+            background: linear-gradient(to right, var(--primary-blue), var(--primary-green));
+            outline: none;
+            -webkit-appearance: none;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0, 136, 255, 0.5);
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            cursor: pointer;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.9),
+                        0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 50px rgba(0, 255, 136, 1);
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+        }
+
+        .slider-value {
+            position: absolute;
+            top: -40px;
+            right: 0;
+            font-size: 32px;
+            font-weight: 900;
+            color: var(--primary-green);
+            text-shadow: 0 0 30px rgba(0, 255, 136, 0.8);
+            padding: 8px 20px;
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 15px;
+            border: 2px solid var(--primary-green);
+        }
+
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin: 50px 0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .result-card {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.15), rgba(136, 0, 255, 0.15));
+            border: 2px solid var(--primary-blue);
+            border-radius: 25px;
+            padding: 35px;
+            text-align: center;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .result-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 136, 255, 0.4);
+            border-color: var(--primary-green);
+        }
+
+        .result-label {
+            font-size: 16px;
+            color: #a0aec0;
+            margin-bottom: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-value {
+            font-size: 48px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .roi-highlight {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(0, 136, 255, 0.2));
+            border: 3px solid var(--primary-green);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.3);
+        }
+
+        .animation-container {
+            text-align: center;
+            margin: 40px 0;
+            min-height: 250px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .calculator-cta {
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        .calculator-cta button {
+            padding: 25px 60px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-size: 22px;
+            font-weight: 800;
+            cursor: pointer;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.7),
+                        0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s;
+        }
+
+        .calculator-cta button:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 80px rgba(0, 255, 136, 1);
+        }
+
+        .micro-copy {
+            text-align: center;
+            margin-top: 20px;
+            color: #a0aec0;
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        /* Ultra Premium Bento Grid */
+        .social-proof {
+            padding: 120px 5%;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 80px;
+        }
+
+        .section-header h2 {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .bento-card {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.05), rgba(136, 0, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 45px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .bento-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+
+        .bento-card:hover::before {
+            left: 100%;
+        }
+
+        .bento-card:hover {
+            transform: translateY(-15px) rotateZ(1deg);
+            box-shadow: 0 30px 80px rgba(0, 136, 255, 0.4);
+            border-color: var(--primary-blue);
+        }
+
+        .bento-card.large {
+            grid-column: span 2;
+        }
+
+        .testimonial-card {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .testimonial-photo {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
+            position: relative;
+            animation: pulse-avatar 3s infinite;
+        }
+
+        @keyframes pulse-avatar {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 136, 255, 0.6);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(0, 255, 136, 0.8);
+            }
+        }
+
+        .testimonial-info h4 {
+            font-size: 22px;
+            margin-bottom: 8px;
+        }
+
+        .testimonial-info p {
+            font-size: 16px;
+            color: #a0aec0;
+        }
+
+        .testimonial-quote {
+            font-size: 24px;
+            font-style: italic;
+            line-height: 1.7;
+            color: #e0e0e0;
+        }
+
+        .location-tag {
+            display: inline-block;
+            padding: 8px 20px;
+            background: rgba(0, 136, 255, 0.2);
+            border-radius: 25px;
+            font-size: 14px;
+            color: var(--primary-blue);
+            border: 1px solid var(--primary-blue);
+        }
+
+        .stats-display {
+            text-align: center;
+        }
+
+        .big-stat {
+            font-size: 64px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+        }
+
+        .stat-label {
+            font-size: 18px;
+            color: #a0aec0;
+            font-weight: 600;
+        }
+
+        .trust-badges {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .badge {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            padding: 18px;
+            background: rgba(0, 255, 136, 0.1);
+            border-radius: 20px;
+            border: 2px solid var(--primary-green);
+            transition: all 0.3s;
+        }
+
+        .badge:hover {
+            background: rgba(0, 255, 136, 0.2);
+            transform: translateX(10px);
+        }
+
+        .badge-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.5);
+        }
+
+        /* Premium Call Section */
+        .call-tool-section {
+            padding: 120px 5%;
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+        }
+
+        .call-tool-container {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .call-tool-container h2 {
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 35px;
+            background: linear-gradient(135deg, #ffffff, var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .phone-container {
+            position: relative;
+            margin: 80px 0;
+        }
+
+        .phone-icon {
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 40px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            cursor: pointer;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 80px rgba(0, 136, 255, 0.6),
+                        inset 0 0 40px rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+
+        .phone-icon::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            border-radius: 50%;
+            border: 2px solid var(--primary-green);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.3);
+                opacity: 0;
+            }
+        }
+
+        .phone-icon:hover {
+            transform: rotateY(180deg) scale(1.15);
+            box-shadow: 0 0 120px rgba(0, 255, 136, 1);
+        }
+
+        .phone-number {
+            font-size: 56px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 30px 0;
+            letter-spacing: 3px;
+            text-shadow: 0 0 50px rgba(0, 255, 136, 0.5);
+        }
+
+        .call-cta {
+            padding: 25px 60px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-size: 22px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 0 50px rgba(0, 255, 136, 0.6);
+        }
+
+        .call-cta:hover {
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 0 80px rgba(0, 255, 136, 1);
+        }
+
+        /* Ultra Premium Pricing */
+        .pricing-section {
+            padding: 120px 5%;
+            position: relative;
+        }
+
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .pricing-card {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.1), rgba(136, 0, 255, 0.1));
+            backdrop-filter: blur(30px);
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            border-radius: 40px;
+            padding: 60px;
+            position: relative;
+            transition: all 0.5s;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.4);
+        }
+
+        .pricing-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            border-radius: 40px;
+            padding: 3px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .pricing-card:hover::before {
+            opacity: 1;
+        }
+
+        .pricing-card:hover {
+            transform: translateY(-20px);
+            box-shadow: 0 40px 120px rgba(0, 136, 255, 0.5);
+        }
+
+        .pricing-card.featured {
+            border-color: var(--primary-green);
+            box-shadow: 0 0 80px rgba(0, 255, 136, 0.4);
+            transform: scale(1.05);
+        }
+
+        .pricing-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pricing-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: var(--primary-blue);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+
+        .pricing-card.featured .pricing-title {
+            color: var(--primary-green);
+        }
+
+        .pricing-amount {
+            font-size: 72px;
+            font-weight: 900;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #ffffff, var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .pricing-period {
+            color: #a0aec0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .pricing-features {
+            list-style: none;
+            margin: 40px 0;
+        }
+
+        .pricing-features li {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            font-size: 18px;
+        }
+
+        .pricing-features li::before {
+            content: "✓";
+            color: var(--primary-green);
+            font-weight: 900;
+            font-size: 24px;
+            text-shadow: 0 0 20px rgba(0, 255, 136, 0.8);
+        }
+
+        .pricing-cta {
+            width: 100%;
+            padding: 22px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            border: none;
+            border-radius: 50px;
+            color: white;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 10px 40px rgba(0, 136, 255, 0.4);
+        }
+
+        .pricing-card.featured .pricing-cta {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            color: #000;
+        }
+
+        .pricing-cta:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 60px rgba(0, 136, 255, 0.6);
+        }
+
+        .roi-note {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 120px 5%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .faq-container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: linear-gradient(135deg, rgba(0, 136, 255, 0.05), rgba(136, 0, 255, 0.05));
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            margin-bottom: 25px;
+            overflow: hidden;
+            transition: all 0.3s;
+        }
+
+        .faq-item.active {
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 40px rgba(0, 136, 255, 0.4);
+        }
+
+        .faq-question {
+            padding: 35px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .faq-icon {
+            font-size: 32px;
+            color: var(--primary-blue);
+            transition: transform 0.4s;
+            text-shadow: 0 0 20px rgba(0, 136, 255, 0.6);
+        }
+
+        .faq-item.active .faq-icon {
+            transform: rotate(45deg);
+            color: var(--primary-green);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 600px;
+        }
+
+        .faq-answer-content {
+            padding: 0 35px 35px;
+            color: #c0c0c0;
+            line-height: 1.9;
+            font-size: 18px;
+        }
+
+        /* Footer */
+        footer {
+            padding: 100px 5%;
+            background: rgba(0, 0, 0, 0.8);
+            border-top: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 80px;
+            max-width: 1400px;
+            margin: 0 auto 60px;
+        }
+
+        .footer-column h3 {
+            font-size: 24px;
+            margin-bottom: 25px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-column p,
+        .footer-column a {
+            color: #a0aec0;
+            line-height: 2.2;
+            text-decoration: none;
+            display: block;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+
+        .footer-column a:hover {
+            color: var(--primary-green);
+            transform: translateX(10px);
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 50px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a0aec0;
+            font-size: 16px;
+        }
+
+        /* Ultra Premium Email Popup */
+        .email-popup {
+            position: fixed;
+            bottom: -600px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 550px;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.95), rgba(10, 14, 39, 0.95));
+            backdrop-filter: blur(30px);
+            border: 3px solid;
+            border-image: linear-gradient(135deg, var(--primary-blue), var(--primary-purple)) 1;
+            border-radius: 40px;
+            padding: 50px;
+            z-index: 10000;
+            transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.7),
+                        0 0 80px rgba(0, 136, 255, 0.3);
+        }
+
+        .email-popup.show {
+            bottom: 40px;
+        }
+
+        .popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+        }
+
+        .popup-backdrop.show {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .popup-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            color: #fff;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .popup-close:hover {
+            background: rgba(255, 0, 0, 0.3);
+            border-color: #ff0000;
+            transform: rotate(90deg);
+        }
+
+        .popup-emoji {
+            font-size: 64px;
+            text-align: center;
+            margin-bottom: 25px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .popup-title {
+            font-size: 32px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff, var(--primary-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .popup-description {
+            text-align: center;
+            color: #c0c0c0;
+            line-height: 1.7;
+            margin-bottom: 35px;
+            font-size: 17px;
+        }
+
+        .popup-form input {
+            width: 100%;
+            padding: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            color: white;
+            font-size: 17px;
+            margin-bottom: 18px;
+            transition: all 0.3s;
+        }
+
+        .popup-form input:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
+        }
+
+        .popup-form button {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-blue));
+            border: none;
+            border-radius: 50px;
+            color: #000;
+            font-size: 20px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 0 40px rgba(0, 255, 136, 0.5);
+        }
+
+        .popup-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 60px rgba(0, 255, 136, 0.8);
+        }
+
+        .popup-benefits {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+            font-size: 13px;
+            color: var(--primary-green);
+            font-weight: 600;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .hero {
+                grid-template-columns: 1fr;
+                padding-top: 120px;
+            }
+
+            .hero-content h1 {
+                font-size: 48px;
+            }
+
+            .hero-visual {
+                height: 450px;
+            }
+
+            .bento-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .bento-card.large {
+                grid-column: span 1;
+            }
+
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header h2 {
+                font-size: 42px;
+            }
+
+            .calculator-header h2 {
+                font-size: 38px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Ultra HD 3D Background -->
+    <canvas id="background-canvas"></canvas>
+    <div class="gradient-overlay"></div>
+    <div class="particles-overlay" id="particles-overlay"></div>
+
+    <div class="content-wrapper">
+        <!-- Navigation -->
+        <nav>
+            <div class="logo">MERCADO</div>
+            <button class="nav-cta" onclick="scrollToSection('pricing')">Start Your Setup</button>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Your Shop Runs While You <span class="kinetic-word">Sleep</span></h1>
+                <p class="subheading">Florida's First AI Command Center for Retail Automation</p>
+                <ul class="value-bullets">
+                    <li>Cut 15+ hours of manual work weekly</li>
+                    <li>Zero long-term contracts</li>
+                    <li>Florida-based support: (813) 461-4494</li>
+                </ul>
+                <div class="cta-group">
+                    <button class="primary-cta" onclick="scrollToSection('pricing')">Start Your $200 Setup</button>
+                    <button class="secondary-cta" onclick="makeCall()">
+                        📞 See The Demo: (320) 377-3566
+                    </button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <canvas id="hero-canvas"></canvas>
+                <div class="zone-labels">
+                    <div class="zone-label" id="inventory-label" style="top: 15%; left: 8%;">Inventory</div>
+                    <div class="zone-label" id="staffing-label" style="top: 55%; left: 12%;">Staffing</div>
+                    <div class="zone-label" id="analytics-label" style="top: 35%; right: 12%;">Analytics</div>
+                    <div class="zone-label" id="customer-label" style="bottom: 18%; right: 18%;">Customer Service</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Calculator Section -->
+        <section class="calculator-section" id="calculator">
+            <div class="calculator-container">
+                <div class="calculator-header">
+                    <h2>Calculate Your Savings</h2>
+                    <p style="color: #a0aec0; font-size: 20px;">See exactly how much time and money you'll save</p>
+                </div>
+                
+                <div class="input-group">
+                    <label>Hours spent on manual tasks per week</label>
+                    <div class="slider-container">
+                        <span class="slider-value" id="hours-value">20</span>
+                        <input type="range" id="hours-slider" min="5" max="40" value="20" step="1">
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Your average hourly cost ($)</label>
+                    <input type="number" id="hourly-cost" value="15" min="10" max="100">
+                </div>
+
+                <div class="results-grid">
+                    <div class="result-card">
+                        <div class="result-label">Weekly Savings</div>
+                        <div class="result-value">$<span id="weekly-savings">300</span></div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">Monthly Savings</div>
+                        <div class="result-value">$<span id="monthly-savings">1,200</span></div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-label">Annual Savings</div>
+                        <div class="result-value">$<span id="annual-savings">14,400</span></div>
+                    </div>
+                    <div class="result-card roi-highlight">
+                        <div class="result-label">Your ROI in 90 Days</div>
+                        <div class="result-value">+<span id="roi-percent">720</span>%</div>
+                    </div>
+                </div>
+
+                <div class="animation-container">
+                    <lottie-player
+                        id="savings-animation"
+                        src="https://assets10.lottiefiles.com/packages/lf20_u4yrau.json"
+                        background="transparent"
+                        speed="1"
+                        style="width: 250px; height: 250px; margin: 0 auto;"
+                        loop
+                        autoplay>
+                    </lottie-player>
+                </div>
+
+                <div class="calculator-cta">
+                    <button onclick="scrollToSection('pricing')">Lock In These Savings - $200 Setup</button>
+                    <p class="micro-copy">Join 47 Florida shops already saving time</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof / Bento Box Section -->
+        <section class="social-proof">
+            <div class="section-header">
+                <h2>Trusted by Florida Shop Owners</h2>
+                <p style="color: #a0aec0; font-size: 20px;">Real results from real businesses</p>
+            </div>
+            <div class="bento-grid">
+                <div class="bento-card large testimonial-card">
+                    <div class="testimonial-header">
+                        <div class="testimonial-photo"></div>
+                        <div class="testimonial-info">
+                            <h4>Maria Rodriguez</h4>
+                            <p>Tampa Bay Coffee Shop</p>
+                        </div>
+                    </div>
+                    <div class="testimonial-quote">
+                        "We got 12 hours back every week. I actually have time for my family now."
+                    </div>
+                    <span class="location-tag">📍 Tampa, FL</span>
+                </div>
+
+                <div class="bento-card stats-display">
+                    <div class="big-stat"><span class="count-up">15847</span></div>
+                    <div class="stat-label">Hours saved this month</div>
+                    <div style="margin-top: 25px; font-size: 50px;">📊</div>
+                </div>
+
+                <div class="bento-card" style="text-align: center;">
+                    <div style="font-size: 70px; margin-bottom: 20px;">📞</div>
+                    <h3 style="margin-bottom: 15px; font-size: 24px;">Try Our Demo</h3>
+                    <p style="color: #a0aec0; margin-bottom: 20px; font-size: 20px;">(320) 377-3566</p>
+                    <button class="secondary-cta" style="width: 100%;" onclick="makeCall()">Call Now</button>
+                    <p style="color: #a0aec0; font-size: 14px; margin-top: 15px;">Average demo: 4 minutes</p>
+                </div>
+
+                <div class="bento-card">
+                    <h3 style="margin-bottom: 25px; font-size: 24px;">Before → After</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; text-align: center;">
+                        <div>
+                            <div style="font-size: 48px; margin-bottom: 15px;">😰</div>
+                            <p style="color: #a0aec0; font-size: 16px;">Manual chaos</p>
+                        </div>
+                        <div>
+                            <div style="font-size: 48px; margin-bottom: 15px;">✨</div>
+                            <p style="color: var(--primary-green); font-size: 16px;">AI-powered flow</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bento-card trust-badges">
+                    <div class="badge">
+                        <div class="badge-icon">🔒</div>
+                        <div style="font-size: 16px; font-weight: 600;">US-Based Servers</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">📍</div>
+                        <div style="font-size: 16px; font-weight: 600;">Florida Business Compliant</div>
+                    </div>
+                    <div class="badge">
+                        <div class="badge-icon">⚡</div>
+                        <div style="font-size: 16px; font-weight: 600;">Zero Long-Term Contracts</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call Tool Section -->
+        <section class="call-tool-section" id="demo">
+            <div class="call-tool-container">
+                <h2>Experience AI Automation Live</h2>
+                <p style="color: #a0aec0; font-size: 20px; margin-bottom: 50px;">
+                    Call our interactive demo line. No sales pitch, just the tech.
+                </p>
+                <div class="phone-container">
+                    <div class="phone-icon" onclick="makeCall()">📞</div>
+                    <div class="phone-number">(320) 377-3566</div>
+                </div>
+                <button class="call-cta" onclick="makeCall()">Call The Demo Line</button>
+                <p style="color: #a0aec0; margin-top: 25px; font-size: 18px;">
+                    Available 24/7 • Average call: 4 minutes
+                </p>
+            </div>
+        </section>
+
+        <!-- Pricing Section -->
+        <section class="pricing-section" id="pricing">
+            <div class="section-header">
+                <h2>Command Center Access</h2>
+                <p style="color: #a0aec0; font-size: 20px;">Simple, transparent pricing. No surprises.</p>
+            </div>
+            <div class="pricing-grid">
+                <div class="pricing-card">
+                    <div class="pricing-header">
+                        <div class="pricing-title">LAUNCH SEQUENCE</div>
+                        <div class="pricing-amount">$200</div>
+                        <div class="pricing-period">one-time setup</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>Complete system setup</li>
+                        <li>Data integration (POS, inventory, staff)</li>
+                        <li>Custom AI training on YOUR shop</li>
+                        <li>1-hour onboarding call</li>
+                        <li>Florida business compliance check</li>
+                    </ul>
+                    <button class="pricing-cta" onclick="alert('Setup payment coming soon!')">Begin Setup</button>
+                </div>
+
+                <div class="pricing-card featured">
+                    <div class="pricing-header">
+                        <div class="pricing-title">MISSION CONTROL</div>
+                        <div class="pricing-amount">$150</div>
+                        <div class="pricing-period">per month</div>
+                    </div>
+                    <ul class="pricing-features">
+                        <li>24/7 AI automation running</li>
+                        <li>Unlimited updates & improvements</li>
+                        <li>Priority Florida support: (813) 461-4494</li>
+                        <li>Monthly optimization review</li>
+                        <li>Cancel anytime (No contracts)</li>
+                    </ul>
+                    <button class="pricing-cta" onclick="alert('Subscription activates after setup!')">Included After Setup →</button>
+                </div>
+            </div>
+            <div class="roi-note">
+                💰 Most shops save $800+/month in labor costs. That's 5X your investment.
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p style="color: #a0aec0; font-size: 20px;">Everything you need to know</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Is my data stored in the US?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Absolutely. All data is encrypted end-to-end and stored on secure, US-based cloud servers (AWS US-East region). We comply with all Florida business data protection standards. Your information never leaves the country.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do I have to sign a long-term contract?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            No. While the $200 setup fee gets you started with a complete system, the $150/month maintenance is month-to-month. We earn your business every 30 days. If you're not seeing ROI, you can cancel anytime—though 94% of our clients stay because the savings are undeniable.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>What if I'm not tech-savvy?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            That's exactly why we built this. The AI does the heavy lifting. You get a simple dashboard (think: Netflix-easy). Plus, our Florida-based team at (813) 461-4494 is always available to help. Average setup call is just 45 minutes.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>How quickly will I see results?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Most shops see time savings in Week 1. By Week 4, you'll have recovered your $200 setup cost through reduced manual work. By Month 3, you're typically saving $800+ monthly in labor costs alone.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Can I try it before committing?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            Call our interactive demo line: (320) 377-3566. It's a 4-minute conversation with our AI system. You'll hear exactly how it works for inventory, staffing, and customer communications. No sales pitch, just the tech.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFAQ(this)">
+                        <span>Do you integrate with my existing POS system?</span>
+                        <span class="faq-icon">+</span>
+                    </div>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            We work with 40+ major POS systems including Square, Clover, Toast, Shopify POS, and Lightspeed. During your $200 setup, we handle all integrations. You don't lift a finger.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer>
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <h3>MERCADO AUTOMATIONS AND AI</h3>
+                    <p>Florida's AI Command Center for Retail</p>
+                    <p style="margin-top: 25px;">
+                        Support: (813) 461-4494<br>
+                        Demo: (320) 377-3566<br>
+                        Email: support@mercadoautomations.ai
+                    </p>
+                    <p>Hours: Mon-Fri 8am-6pm EST</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <a href="#calculator">ROI Calculator</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#faq">FAQs</a>
+                    <a href="#" onclick="alert('Service Agreement coming soon!')">Service Agreement</a>
+                    <a href="#" onclick="alert('Privacy Policy coming soon!')">Privacy Policy</a>
+                </div>
+                <div class="footer-column">
+                    <h3>Locations Served</h3>
+                    <p>Proudly Serving:</p>
+                    <p>• Tampa Bay Area<br>
+                    • Hillsborough County<br>
+                    • Polk County<br>
+                    • Central Florida Retail Shops</p>
+                    <p style="margin-top: 25px; color: var(--primary-green); font-weight: 700;">US-Based. Florida-Focused.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p style="font-size: 18px; margin-bottom: 10px;">© 2026 Mercado Automations and AI, LLC</p>
+                <p>Governed by Florida Law (Hillsborough County)</p>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Email Popup -->
+    <div class="popup-backdrop" id="popup-backdrop" onclick="closePopup()"></div>
+    <div class="email-popup" id="email-popup">
+        <button class="popup-close" onclick="closePopup()">×</button>
+        <div class="popup-emoji">🚀</div>
+        <h3 class="popup-title">Don't Leave Your ROI to Chance</h3>
+        <p class="popup-description">
+            Enter your email and get the "Mercado Blueprint"—a 5-minute guide showing how Florida shops are cutting 15 hours of manual work every week.
+        </p>
+        <form class="popup-form" onsubmit="submitPopupForm(event)">
+            <input type="email" placeholder="your@email.com" required id="popup-email">
+            <input type="text" placeholder="Shop Name (Optional)" id="popup-shop">
+            <button type="submit">Send Me The Blueprint</button>
+        </form>
+        <div class="popup-benefits">
+            <span>✓ No spam, just actionable tips</span>
+            <span>✓ Unsubscribe anytime</span>
+        </div>
+    </div>
+
+    <script>
+        // ============================================
+        // ULTRA HD 3D BACKGROUND WITH ANIMATED ICONS
+        // ============================================
+        const bgCanvas = document.getElementById('background-canvas');
+        const bgScene = new THREE.Scene();
+        const bgCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const bgRenderer = new THREE.WebGLRenderer({ canvas: bgCanvas, alpha: true, antialias: true });
+        
+        bgRenderer.setSize(window.innerWidth, window.innerHeight);
+        bgRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        bgCamera.position.z = 30;
+
+        // Create 3D Icons (Shopping Cart, Clock, Graph, People, etc.)
+        const iconGeometries = [
+            new THREE.BoxGeometry(1.5, 1.5, 1.5),        // Box for packages
+            new THREE.SphereGeometry(0.8, 16, 16),       // Sphere for analytics
+            new THREE.TorusGeometry(0.7, 0.3, 16, 32),   // Torus for automation
+            new THREE.ConeGeometry(0.7, 1.5, 8),         // Cone for alerts
+            new THREE.OctahedronGeometry(0.8),           // Octahedron for AI
+            new THREE.TetrahedronGeometry(0.9),          // Tetrahedron for efficiency
+        ];
+
+        const iconMaterials = [
+            new THREE.MeshPhongMaterial({ color: 0x0088ff, transparent: true, opacity: 0.7, wireframe: true }),
+            new THREE.MeshPhongMaterial({ color: 0x00ff88, transparent: true, opacity: 0.7, wireframe: true }),
+            new THREE.MeshPhongMaterial({ color: 0x8800ff, transparent: true, opacity: 0.7, wireframe: true }),
+            new THREE.MeshPhongMaterial({ color: 0xffaa00, transparent: true, opacity: 0.7, wireframe: true }),
+        ];
+
+        const icons = [];
+        for (let i = 0; i < 40; i++) {
+            const geometry = iconGeometries[Math.floor(Math.random() * iconGeometries.length)];
+            const material = iconMaterials[Math.floor(Math.random() * iconMaterials.length)];
+            const mesh = new THREE.Mesh(geometry, material);
+            
+            mesh.position.x = (Math.random() - 0.5) * 100;
+            mesh.position.y = (Math.random() - 0.5) * 100;
+            mesh.position.z = (Math.random() - 0.5) * 50;
+            
+            mesh.rotation.x = Math.random() * Math.PI;
+            mesh.rotation.y = Math.random() * Math.PI;
+            
+            mesh.userData = {
+                speedX: (Math.random() - 0.5) * 0.002,
+                speedY: (Math.random() - 0.5) * 0.002,
+                rotationSpeed: (Math.random() - 0.5) * 0.02,
+            };
+            
+            bgScene.add(mesh);
+            icons.push(mesh);
+        }
+
+        // Advanced lighting
+        const bgLight1 = new THREE.PointLight(0x0088ff, 2, 100);
+        bgLight1.position.set(20, 20, 20);
+        bgScene.add(bgLight1);
+
+        const bgLight2 = new THREE.PointLight(0x00ff88, 2, 100);
+        bgLight2.position.set(-20, -20, 20);
+        bgScene.add(bgLight2);
+
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+        bgScene.add(ambientLight);
+
+        // Background animation loop
+        function animateBackground() {
+            requestAnimationFrame(animateBackground);
+            
+            icons.forEach(icon => {
+                icon.rotation.x += icon.userData.rotationSpeed;
+                icon.rotation.y += icon.userData.rotationSpeed;
+                
+                icon.position.x += icon.userData.speedX;
+                icon.position.y += icon.userData.speedY;
+                
+                // Wrap around screen
+                if (icon.position.x > 50) icon.position.x = -50;
+                if (icon.position.x < -50) icon.position.x = 50;
+                if (icon.position.y > 50) icon.position.y = -50;
+                if (icon.position.y < -50) icon.position.y = 50;
+            });
+            
+            bgLight1.position.x = Math.sin(Date.now() * 0.001) * 30;
+            bgLight1.position.y = Math.cos(Date.now() * 0.001) * 30;
+            
+            bgLight2.position.x = Math.cos(Date.now() * 0.0015) * 30;
+            bgLight2.position.y = Math.sin(Date.now() * 0.0015) * 30;
+            
+            bgRenderer.render(bgScene, bgCamera);
+        }
+        animateBackground();
+
+        // Create floating particles
+        function createParticles() {
+            const container = document.getElementById('particles-overlay');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.setProperty('--tx', (Math.random() - 0.5) * 200 + 'vw');
+                particle.style.setProperty('--ty', (Math.random() - 0.5) * 200 + 'vh');
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+        createParticles();
+
+        // ============================================
+        // HERO 3D NEURAL CORE
+        // ============================================
+        const heroCanvas = document.getElementById('hero-canvas');
+        const heroScene = new THREE.Scene();
+        const heroCamera = new THREE.PerspectiveCamera(75, heroCanvas.clientWidth / heroCanvas.clientHeight, 0.1, 1000);
+        const heroRenderer = new THREE.WebGLRenderer({ canvas: heroCanvas, alpha: true, antialias: true });
+        
+        heroRenderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
+        heroRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        heroCamera.position.z = 5;
+
+        // Create ultra-detailed neural core
+        const coreGeometry = new THREE.IcosahedronGeometry(1.8, 3);
+        const coreMaterial = new THREE.MeshPhongMaterial({
+            color: 0x0088ff,
+            transparent: true,
+            opacity: 0.7,
+            wireframe: true,
+            wireframeLinewidth: 2,
+        });
+        const coreSphere = new THREE.Mesh(coreGeometry, coreMaterial);
+        heroScene.add(coreSphere);
+
+        // Inner sphere
+        const innerGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+        const innerMaterial = new THREE.MeshPhongMaterial({
+            color: 0x00ff88,
+            transparent: true,
+            opacity: 0.3,
+        });
+        const innerSphere = new THREE.Mesh(innerGeometry, innerMaterial);
+        heroScene.add(innerSphere);
+
+        // Particles around core
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 2000;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 15;
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.015,
+            color: 0x00ff88,
+            transparent: true,
+            opacity: 0.9,
+            blending: THREE.AdditiveBlending,
+        });
+        const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        heroScene.add(particlesMesh);
+
+        // Dramatic lighting
+        const heroLight1 = new THREE.PointLight(0x0088ff, 3, 50);
+        heroLight1.position.set(5, 5, 5);
+        heroScene.add(heroLight1);
+
+        const heroLight2 = new THREE.PointLight(0x00ff88, 2, 50);
+        heroLight2.position.set(-5, -5, 5);
+        heroScene.add(heroLight2);
+
+        const heroAmbient = new THREE.AmbientLight(0x404040, 0.3);
+        heroScene.add(heroAmbient);
+
+        // Mouse tracking for hero
+        let mouseX = 0;
+        let mouseY = 0;
+        let currentZone = null;
+
+        heroCanvas.addEventListener('mousemove', (e) => {
+            const rect = heroCanvas.getBoundingClientRect();
+            mouseX = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+            mouseY = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+            if (mouseX < -0.3 && mouseY > 0.2) {
+                setActiveZone('inventory', 0x00ff88);
+            } else if (mouseX < -0.2 && mouseY < -0.2) {
+                setActiveZone('staffing', 0x0088ff);
+            } else if (mouseX > 0.2 && mouseY > -0.2 && mouseY < 0.2) {
+                setActiveZone('analytics', 0xffaa00);
+            } else if (mouseX > 0.3 && mouseY < -0.2) {
+                setActiveZone('customer', 0x8800ff);
+            } else {
+                setActiveZone(null, 0x0088ff);
+            }
+        });
+
+        function setActiveZone(zone, color) {
+            if (currentZone !== zone) {
+                currentZone = zone;
+                coreMaterial.color.setHex(color);
+                innerMaterial.color.setHex(color);
+                particlesMaterial.color.setHex(color);
+                
+                document.querySelectorAll('.zone-label').forEach(label => {
+                    label.classList.remove('active');
+                });
+                if (zone) {
+                    const label = document.getElementById(`${zone}-label`);
+                    if (label) {
+                        label.classList.add('active');
+                        label.style.borderColor = '#' + color.toString(16).padStart(6, '0');
+                        label.style.boxShadow = `0 0 50px rgba(${(color >> 16) & 255}, ${(color >> 8) & 255}, ${color & 255}, 0.8)`;
+                    }
+                }
+            }
+        }
+
+        // Hero animation loop
+        function animateHero() {
+            requestAnimationFrame(animateHero);
+            
+            coreSphere.rotation.x += 0.002;
+            coreSphere.rotation.y += 0.003;
+            
+            innerSphere.rotation.x -= 0.003;
+            innerSphere.rotation.y -= 0.002;
+            
+            particlesMesh.rotation.y += 0.001;
+            
+            // Follow mouse
+            coreSphere.rotation.y = mouseX * 0.5;
+            coreSphere.rotation.x = mouseY * 0.5;
+            
+            heroLight1.position.x = Math.sin(Date.now() * 0.001) * 5;
+            heroLight1.position.y = Math.cos(Date.now() * 0.001) * 5;
+            
+            heroRenderer.render(heroScene, heroCamera);
+        }
+        animateHero();
+
+        // ============================================
+        // CALCULATOR LOGIC
+        // ============================================
+        const hoursSlider = document.getElementById('hours-slider');
+        const hoursValue = document.getElementById('hours-value');
+        const hourlyCost = document.getElementById('hourly-cost');
+
+        function updateCalculator() {
+            const hours = parseInt(hoursSlider.value);
+            const cost = parseInt(hourlyCost.value);
+            
+            hoursValue.textContent = hours;
+            
+            const weeklySavings = hours * cost;
+            const monthlySavings = weeklySavings * 4;
+            const annualSavings = weeklySavings * 52;
+            const roi = ((monthlySavings * 3 - 200 - 450) / (200 + 450) * 100).toFixed(0);
+            
+            animateValue('weekly-savings', weeklySavings, 500);
+            animateValue('monthly-savings', monthlySavings, 500);
+            animateValue('annual-savings', annualSavings, 500);
+            animateValue('roi-percent', Math.max(0, roi), 500);
+        }
+
+        function animateValue(id, end, duration) {
+            const element = document.getElementById(id);
+            const start = parseInt(element.textContent.replace(/,/g, '')) || 0;
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 16);
+        }
+
+        hoursSlider.addEventListener('input', updateCalculator);
+        hourlyCost.addEventListener('input', updateCalculator);
+        updateCalculator();
+
+        // ============================================
+        // EMAIL POPUP LOGIC
+        // ============================================
+        let popupShown = false;
+        const hasSeenPopup = localStorage.getItem('mercado-popup-seen');
+
+        if (!hasSeenPopup) {
+            setTimeout(() => {
+                const scrollPercent = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+                if (scrollPercent < 50 && !popupShown) {
+                    showPopup();
+                    popupShown = true;
+                }
+            }, 10000);
+        }
+
+        function showPopup() {
+            document.getElementById('email-popup').classList.add('show');
+            document.getElementById('popup-backdrop').classList.add('show');
+        }
+
+        function closePopup() {
+            document.getElementById('email-popup').classList.remove('show');
+            document.getElementById('popup-backdrop').classList.remove('show');
+            localStorage.setItem('mercado-popup-seen', 'true');
+            setTimeout(() => {
+                localStorage.removeItem('mercado-popup-seen');
+            }, 7 * 24 * 60 * 60 * 1000);
+        }
+
+        function submitPopupForm(e) {
+            e.preventDefault();
+            const email = document.getElementById('popup-email').value;
+            const shop = document.getElementById('popup-shop').value;
+            
+            console.log('Email submitted:', email, shop);
+            alert('✅ Check your inbox! Blueprint arriving in 60 seconds.');
+            closePopup();
+        }
+
+        // ============================================
+        // FAQ TOGGLE
+        // ============================================
+        function toggleFAQ(element) {
+            const item = element.parentElement;
+            const wasActive = item.classList.contains('active');
+            
+            document.querySelectorAll('.faq-item').forEach(faq => {
+                faq.classList.remove('active');
+            });
+            
+            if (!wasActive) {
+                item.classList.add('active');
+            }
+        }
+
+        // ============================================
+        // UTILITY FUNCTIONS
+        // ============================================
+        function scrollToSection(id) {
+            document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function makeCall() {
+            if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+                window.location.href = 'tel:+13203773566';
+            } else {
+                alert('📞 Call (320) 377-3566 from your phone to experience our AI demo!');
+            }
+        }
+
+        // Count up animation for stats
+        let countStarted = false;
+        window.addEventListener('scroll', () => {
+            const countElement = document.querySelector('.count-up');
+            if (countElement && !countStarted) {
+                const rect = countElement.getBoundingClientRect();
+                if (rect.top < window.innerHeight && rect.bottom > 0) {
+                    countStarted = true;
+                    animateValue('count-up', 15847, 2000);
+                }
+            }
+        });
+
+        // Responsive canvas handling
+        window.addEventListener('resize', () => {
+            // Background canvas
+            bgCamera.aspect = window.innerWidth / window.innerHeight;
+            bgCamera.updateProjectionMatrix();
+            bgRenderer.setSize(window.innerWidth, window.innerHeight);
+            
+            // Hero canvas
+            heroCamera.aspect = heroCanvas.clientWidth / heroCanvas.clientHeight;
+            heroCamera.updateProjectionMatrix();
+            heroRenderer.setSize(heroCanvas.clientWidth, heroCanvas.clientHeight);
+        });
+
+        // Fix for count-up element
+        function animateValue(id, end, duration) {
+            let element = document.getElementById(id);
+            if (!element) {
+                const elements = document.getElementsByClassName(id);
+                if (elements.length > 0) element = elements[0];
+            }
+            if (!element) return;
+            
+            const start = parseInt(element.textContent.replace(/,/g, '')) || 0;
+            const range = end - start;
+            const increment = range / (duration / 16);
+            let current = start;
+            
+            const timer = setInterval(() => {
+                current += increment;
+                if ((increment > 0 && current >= end) || (increment < 0 && current <= end)) {
+                    current = end;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current).toLocaleString();
+            }, 16);
+        }
+    </script>
+</body>
+</html>
